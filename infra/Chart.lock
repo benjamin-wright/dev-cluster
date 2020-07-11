@@ -1,0 +1,18 @@
+dependencies:
+- name: nginx-ingress
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 1.36.3
+- name: metrics-server
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 2.11.1
+- name: prometheus
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 11.1.6
+- name: grafana
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 5.0.26
+- name: verdaccio
+  repository: https://charts.verdaccio.org
+  version: 0.10.0
+digest: sha256:5601364e7c6653f52e26c4e5bffeb7df065b5d222859e31f7c920424fb97b293
+generated: "2020-07-11T22:20:41.703026+01:00"

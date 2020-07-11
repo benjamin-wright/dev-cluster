@@ -1,0 +1,27 @@
+nginx-ingress:
+  controller:
+    service:
+      type: NodePort
+      nodePorts:
+        http: 30080
+        https: 30443
+    extraArgs:
+      default-ssl-certificate: infra/wildcard-cert
+
+metrics-server:
+  args:
+    - --kubelet-insecure-tls
+    - --kubelet-preferred-address-types=InternalIP
+
+verdaccio:
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: 0m
+      cert-manager.io/cluster-issuer: selfsigning-issuer
+    hosts:
+    - npm.ponglehub.co.uk
+    tls:
+    - hosts:
+      - npm.ponglehub.co.uk
+      secretName: npm-cert
