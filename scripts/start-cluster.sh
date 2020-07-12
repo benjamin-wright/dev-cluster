@@ -4,6 +4,30 @@ set -o errexit
 
 KIND_CLUSTER_NAME="local-dev"
 
+function start-chart-museum() {
+  if docker ps | grep chart-museum -q; then
+    echo "chart museum already exists..."
+    return
+  fi
+
+  echo "creating chart museum..."
+
+  docker run -d \
+    --restart=always \
+    -p 5007:5007 \
+    -e PORT=5007 \
+    -e DEBUG=1 \
+    -e STORAGE=local \
+    -e STORAGE_LOCAL_ROOTDIR=./chartstorage \
+    -v $(pwd)/data/charts:/chartstorage:cached \
+    --name chart-museum \
+    chartmuseum/chartmuseum:latest
+
+  helm repo add local http://localhost:5007
+
+  echo "done"
+}
+
 function start-kind() {
   local kind_network='kind'
   local reg_name="registry-${KIND_CLUSTER_NAME}"
@@ -80,25 +104,32 @@ function wait-for-kind() {
   echo "finished!";
 }
 
+function deploy-cert-manager-crds() {
+  kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.15.0/cert-manager.crds.yaml
+}
+
 function deploy-infra() {
   echo 'deploying standard infrastructure...';
   kubectl get ns | grep infra || kubectl create ns infra
   helm dep update ./infra
-  helm upgrade --install \
+  helm upgrade --install infra ./infra \
     --wait \
     --namespace infra \
-    --set mongo.tls.cacert=$(cat ssl/cert.crt | base64) \
-    --set mongo.tls.cakey=$(cat ssl/cert.key | base64) \
-    infra ./infra
+    --set "git.base.id_rsapub=$(cat ~/.ssh/id_rsa.pub)"
   echo 'done';
 }
 
 ##############################################################################
 #                                   Main                                     #
 ##############################################################################
+
+start-chart-museum
+(cd git-server && make push)
+
 if !(kind get clusters | grep $KIND_CLUSTER_NAME -q); then
   start-kind
   wait-for-kind
 fi
 
+deploy-cert-manager-crds
 deploy-infra

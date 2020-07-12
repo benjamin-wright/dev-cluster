@@ -1,0 +1,13 @@
+image: localhost:5000/git-repo
+
+issuer: selfsigning-issuer
+hostname: git.local.com
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 64Mi
+
+base:
+  user: tester
+  id_rsapub: base-encoded

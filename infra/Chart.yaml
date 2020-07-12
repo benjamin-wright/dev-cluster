@@ -26,6 +26,9 @@ dependencies:
   - name: nginx-ingress
     version: ~1.36.3
     repository: https://kubernetes-charts.storage.googleapis.com
+  - name: cert-manager
+    version: ~0.14.2
+    repository: https://charts.jetstack.io
   - name: metrics-server
     version: ~2.11.1
     repository: https://kubernetes-charts.storage.googleapis.com
@@ -40,3 +43,7 @@ dependencies:
   - name: verdaccio
     version: 0.10.0
     repository: https://charts.verdaccio.org
+  - name: git-server
+    alias: git
+    version: 0.1.2
+    repository: "@local"

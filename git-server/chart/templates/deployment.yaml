@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: git-repo-deployment
+  labels:
+    app: git-repo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: git-repo
+  template:
+    metadata:
+      labels:
+        app: git-repo
+    spec:
+      containers:
+      - name: git-repo
+        image: {{ .Values.image }}
+        ports:
+        - name: ssh
+          containerPort: 22
+        env:
+        - name: BASE_USER
+          value: {{ .Values.base.user }}
+        - name: BASE_KEY
+          value: {{ .Values.base.id_rsapub }}
+        resources:
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}

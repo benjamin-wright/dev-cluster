@@ -1,3 +1,6 @@
+environment:
+  hostname: ponglehub.co.uk
+
 nginx-ingress:
   controller:
     service:
@@ -7,6 +10,9 @@ nginx-ingress:
         https: 30443
     extraArgs:
       default-ssl-certificate: infra/wildcard-cert
+
+certManager:
+  httpIssuer: false
 
 metrics-server:
   args:
@@ -25,3 +31,9 @@ verdaccio:
     - hosts:
       - npm.ponglehub.co.uk
       secretName: npm-cert
+
+git:
+  base:
+    user: gituser
+    id_rsapub: base-encoded
+  hostname: git.ponglehub.co.uk

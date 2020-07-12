@@ -1,0 +1,7 @@
+apiVersion: v2
+name: git-server
+description: A Helm chart for the git repo utility
+
+type: application
+version: 0.1.2
+appVersion: 1.16.0
