@@ -71,3 +71,23 @@ elasticsearch:
     - hosts:
       - elastic.ponglehub.co.uk
       secretName: elastic-cert
+
+kibana:
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "512M"
+    limits:
+      cpu: "500m"
+      memory: "512M"
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: 0m
+      cert-manager.io/cluster-issuer: selfsigning-issuer
+    hosts:
+    - kibana.ponglehub.co.uk
+    tls:
+    - hosts:
+      - kibana.ponglehub.co.uk
+      secretName: kibana-cert

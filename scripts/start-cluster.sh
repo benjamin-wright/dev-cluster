@@ -129,7 +129,6 @@ function deploy-infra() {
   echo 'deploying standard infrastructure...';
   kubectl get ns | grep infra || kubectl create ns infra
   helm dep update ./infra
-  helm delete infra --namespace infra
   helm upgrade --install infra ./infra \
     --wait \
     --namespace infra \
