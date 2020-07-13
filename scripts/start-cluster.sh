@@ -23,6 +23,8 @@ function start-chart-museum() {
     --name chart-museum \
     chartmuseum/chartmuseum:latest
 
+  sleep 1
+
   helm repo add local http://localhost:5007
 
   echo "done"
@@ -39,6 +41,8 @@ function start-registry() {
       -d --restart=always -p "${reg_port}:5000" --name "${reg_name}" \
       registry:2
   fi
+
+  sleep 1
 
   local reg_host="${reg_name}"
   echo "Registry Host: ${reg_host}"
