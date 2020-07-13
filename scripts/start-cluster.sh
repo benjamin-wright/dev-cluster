@@ -132,7 +132,8 @@ function deploy-infra() {
   helm upgrade --install infra ./infra \
     --wait \
     --namespace infra \
-    --set "git.base.id_rsapub=$(cat ~/.ssh/id_rsa.pub | base64 | tr -d '\n')"
+    --set "git.base.id_rsapub=$(cat ~/.ssh/id_rsa.pub | base64 | tr -d '\n')" \
+    --set-file "grafana.dashboards.default.custom.json=./grafana/dashboard.json"
   echo 'done';
 }
 
