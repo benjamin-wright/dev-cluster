@@ -1,4 +1,4 @@
-image: localhost:5000/git-repo
+image: localhost:5000/git-server
 
 issuer: selfsigning-issuer
 hostname: git.local.com

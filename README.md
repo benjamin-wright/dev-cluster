@@ -18,3 +18,9 @@ Self-container startup script and basic infrastructure chart for running a local
 - grafana
 - verdaccio (NPM repository)
 - shared docker registry running on `localhost:5000` for easily pushing images to the cluster
+- git server
+
+## To use:
+
+Chart museum listens on localhost:5007
+Git server ssh on localhost:2222

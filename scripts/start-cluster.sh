@@ -28,8 +28,7 @@ function start-chart-museum() {
   echo "done"
 }
 
-function start-kind() {
-  local kind_network='kind'
+function start-registry() {
   local reg_name="registry-${KIND_CLUSTER_NAME}"
   local reg_port='5000'
 
@@ -43,6 +42,17 @@ function start-kind() {
 
   local reg_host="${reg_name}"
   echo "Registry Host: ${reg_host}"
+}
+
+function build-git-server() {
+  (cd git-server && make push)
+}
+
+function start-kind() {
+  local kind_network='kind'
+  local reg_name="registry-${KIND_CLUSTER_NAME}"
+  local reg_port='5000'
+  local reg_host="${reg_name}"
 
   # create a cluster with the local registry enabled in containerd
   cat <<EOF | kind create cluster --name "${KIND_CLUSTER_NAME}" --config=-
@@ -56,6 +66,9 @@ nodes:
     protocol: TCP
   - containerPort: 30443
     hostPort: 443
+    protocol: TCP
+  - containerPort: 32222
+    hostPort: 2222
     protocol: TCP
 containerdConfigPatches:
 - |-
@@ -115,7 +128,7 @@ function deploy-infra() {
   helm upgrade --install infra ./infra \
     --wait \
     --namespace infra \
-    --set "git.base.id_rsapub=$(cat ~/.ssh/id_rsa.pub)"
+    --set "git.base.id_rsapub=$(cat ~/.ssh/id_rsa.pub | base64 | tr -d '\n')"
   echo 'done';
 }
 
@@ -124,7 +137,8 @@ function deploy-infra() {
 ##############################################################################
 
 start-chart-museum
-(cd git-server && make push)
+start-registry
+build-git-server
 
 if !(kind get clusters | grep $KIND_CLUSTER_NAME -q); then
   start-kind

@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: git-repo-deployment
+  name: git-server-deployment
   labels:
-    app: git-repo
+    app: git-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: git-repo
+      app: git-server
   template:
     metadata:
       labels:
-        app: git-repo
+        app: git-server
     spec:
       containers:
-      - name: git-repo
+      - name: git-server
         image: {{ .Values.image }}
         ports:
         - name: ssh

@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: git-repo
+  name: git-server
 spec:
   type: ClusterIP
   selector:
-    app: git-repo
+    app: git-server
   ports:
-  - port: 22
+  - port: 2222
     targetPort: 22
