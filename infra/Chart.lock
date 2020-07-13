@@ -20,5 +20,8 @@ dependencies:
 - name: git-server
   repository: http://localhost:5007
   version: 0.1.2
-digest: sha256:0e8f16dc924ef07c375a051ccf3eab2ddf7ebcab3c5f5034ab992bf278bb2725
-generated: "2020-07-12T09:07:39.988104+01:00"
+- name: elasticsearch
+  repository: https://helm.elastic.co
+  version: 7.8.0
+digest: sha256:16dec72a15eef1630e189b4ecf783e727bbcb1dcc63a33a86c5f4cabbc9d6008
+generated: "2020-07-13T13:18:31.268199+01:00"
