@@ -1,0 +1,19 @@
+environment:
+  hostname: ponglehub.co.uk
+
+nginx-ingress:
+  controller:
+    service:
+      type: NodePort
+      nodePorts:
+        http: 30080
+        https: 30443
+        tcp:
+          32222: 32222
+    extraArgs:
+      default-ssl-certificate: infra/wildcard-cert
+  tcp:
+    32222: infra/git-server:2222
+
+certManager:
+  httpIssuer: false

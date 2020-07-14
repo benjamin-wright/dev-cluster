@@ -128,12 +128,31 @@ function deploy-cert-manager-crds() {
 function deploy-infra() {
   echo 'deploying standard infrastructure...';
   kubectl get ns | grep infra || kubectl create ns infra
-  helm dep update ./infra
-  helm upgrade --install infra ./infra \
+
+  helm repo update
+
+  helm dep update ./infra/basics --skip-refresh
+  helm upgrade --install basics ./infra/basics \
+    --wait \
+    --namespace infra
+
+  helm dep update ./infra/metrics --skip-refresh
+  helm upgrade --install metrics ./infra/metrics \
+    --wait \
+    --namespace infra \
+    --set-file "grafana.dashboards.default.custom.json=./grafana/dashboard.json" \
+    --set "secrets.admin.password=$(echo "password" | tr -d '\n' | base64)"
+
+  helm dep update ./infra/logging --skip-refresh
+  helm upgrade --install logging ./infra/logging \
+    --wait \
+    --namespace infra
+
+  helm dep update ./infra/registries --skip-refresh
+  helm upgrade --install registries ./infra/registries \
     --wait \
     --namespace infra \
     --set "git.base.id_rsapub=$(cat ~/.ssh/id_rsa.pub | base64 | tr -d '\n')"
-  echo 'done';
 }
 
 ##############################################################################
