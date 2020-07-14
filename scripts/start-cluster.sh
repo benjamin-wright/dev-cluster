@@ -172,6 +172,8 @@ build-git-server
 if !(kind get clusters | grep $KIND_CLUSTER_NAME -q); then
   start-kind
   wait-for-kind
+else
+  kubectl config use-context kind-local-dev
 fi
 
 deploy-cert-manager-crds
