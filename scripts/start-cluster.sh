@@ -153,6 +153,12 @@ function deploy-infra() {
     --wait \
     --namespace infra \
     --set "git.base.id_rsapub=$(cat ~/.ssh/id_rsa.pub | base64 | tr -d '\n')"
+
+
+  kubectl get ns | grep data || kubectl create ns data
+
+  helm dep update ./infra/data --skip-refresh
+  helm upgrade --install data ./infra/data --namespace data
 }
 
 ##############################################################################
@@ -166,6 +172,8 @@ build-git-server
 if !(kind get clusters | grep $KIND_CLUSTER_NAME -q); then
   start-kind
   wait-for-kind
+else
+  kubectl config use-context kind-local-dev
 fi
 
 deploy-cert-manager-crds

@@ -1,0 +1,32 @@
+pulsar:
+  namespace: data
+  volumes:
+    persistence: false
+  affinity:
+    anti_affinity: false
+  components:
+    autorecovery: false
+  monitoring:
+    prometheus: false
+    grafana: false
+  bookkeeper:
+    replicaCount: 1
+    metadata:
+      resources:
+        requests:
+          cpu: 500m
+          memory: 512M
+  zookeeper:
+    replicaCount: 1
+  broker:
+    replicaCount: 1
+    configData:
+      ## Enable `autoSkipNonRecoverableData` since bookkeeper is running
+      ## without persistence
+      autoSkipNonRecoverableData: "true"
+      # storage settings
+      managedLedgerDefaultEnsembleSize: "1"
+      managedLedgerDefaultWriteQuorum: "1"
+      managedLedgerDefaultAckQuorum: "1"
+  proxy:
+    replicaCount: 1

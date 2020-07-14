@@ -16,11 +16,20 @@ Self-container startup script and basic infrastructure chart for running a local
 - metrics server
 - prometheus
 - grafana
-- verdaccio (NPM repository)
+- ELK stack
+- pulsar (distributed messaging)
 - shared docker registry running on `localhost:5000` for easily pushing images to the cluster
 - git server
+- verdaccio (NPM)
 
 ## To use:
 
 Chart museum listens on localhost:5007
 Git server ssh on localhost:2222
+
+set hosts entries:
+- 127.0.0.1  npm.ponglehub.co.uk
+- 127.0.0.1  git.ponglehub.co.uk
+- 127.0.0.1  grafana.ponglehub.co.uk
+- 127.0.0.1  elastic.ponglehub.co.uk
+- 127.0.0.1  kibana.ponglehub.co.uk
