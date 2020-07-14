@@ -1,0 +1,20 @@
+pulsar:
+  namespace: data
+  affinity:
+    anti_affinity: false
+  monitoring:
+    prometheus: false
+    grafana: false
+  bookkeeper:
+    replicaCount: 1
+    metadata:
+      resources:
+        requests:
+          cpu: 500m
+          memory: 512M
+  zookeeper:
+    replicaCount: 3
+  broker:
+    replicaCount: 1
+  proxy:
+    replicaCount: 1
