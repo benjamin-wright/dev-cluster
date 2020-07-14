@@ -1,5 +1,5 @@
 apiVersion: v2
-name: infra
+name: logging
 description: A Helm chart for Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
@@ -23,30 +23,6 @@ version: 0.1.0
 appVersion: 1.16.0
 
 dependencies:
-  - name: nginx-ingress
-    version: ~1.36.3
-    repository: https://kubernetes-charts.storage.googleapis.com
-  - name: cert-manager
-    version: ~0.14.2
-    repository: https://charts.jetstack.io
-  - name: metrics-server
-    version: ~2.11.1
-    repository: https://kubernetes-charts.storage.googleapis.com
-  - name: prometheus
-    version: ~11.1.5
-    repository: https://kubernetes-charts.storage.googleapis.com/
-    condition: prometheus.enabled
-  - name: grafana
-    version: ~5.0.23
-    repository: https://kubernetes-charts.storage.googleapis.com/
-    condition: grafana.enabled
-  - name: verdaccio
-    version: 0.10.0
-    repository: https://charts.verdaccio.org
-  - name: git-server
-    alias: git
-    version: 0.1.2
-    repository: "@local"
   - name: elasticsearch
     version: 7.8.0
     repository: https://helm.elastic.co
