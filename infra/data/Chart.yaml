@@ -26,3 +26,6 @@ dependencies:
   - name: pulsar
     version: 2.6.0
     repository: https://pulsar.apache.org/charts
+  - name: cockroachdb
+    version: 4.0.4
+    repository: https://charts.cockroachdb.com

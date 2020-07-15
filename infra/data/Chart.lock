@@ -2,5 +2,8 @@ dependencies:
 - name: pulsar
   repository: https://pulsar.apache.org/charts
   version: 2.6.0
-digest: sha256:90f1b1001e5994a1a7b32971355f923f18b7181c43975d80c3bb71dc98517300
-generated: "2020-07-14T07:13:51.584143+01:00"
+- name: cockroachdb
+  repository: https://charts.cockroachdb.com
+  version: 4.0.4
+digest: sha256:1d997a7b35d5abfdc562157bda218bd316395d2dd7f40c6dbddcdee70fc2b2c7
+generated: "2020-07-15T06:14:10.804527+01:00"

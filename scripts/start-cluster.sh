@@ -121,15 +121,22 @@ function wait-for-kind() {
   echo "finished!";
 }
 
-function deploy-cert-manager-crds() {
-  kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.15.0/cert-manager.crds.yaml
-}
+# function deploy-cert-manager-crds() {
+#   kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.15.0/cert-manager.crds.yaml
+# }
 
 function deploy-infra() {
   echo 'deploying standard infrastructure...';
   kubectl get ns | grep infra || kubectl create ns infra
 
   helm repo update
+
+  helm upgrade -i \
+    cert-manager jetstack/cert-manager \
+    --namespace infra \
+    --version v0.15.1 \
+    --wait \
+    --set installCRDs=true
 
   helm dep update ./infra/basics --skip-refresh
   helm upgrade --install basics ./infra/basics \
@@ -146,6 +153,7 @@ function deploy-infra() {
   helm dep update ./infra/logging --skip-refresh
   helm upgrade --install logging ./infra/logging \
     --wait \
+    --timeout 10m0s \
     --namespace infra
 
   helm dep update ./infra/registries --skip-refresh
@@ -172,9 +180,7 @@ build-git-server
 if !(kind get clusters | grep $KIND_CLUSTER_NAME -q); then
   start-kind
   wait-for-kind
-else
-  kubectl config use-context kind-local-dev
 fi
 
-deploy-cert-manager-crds
+# deploy-cert-manager-crds
 deploy-infra

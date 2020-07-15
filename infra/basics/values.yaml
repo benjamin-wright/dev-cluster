@@ -14,6 +14,3 @@ nginx-ingress:
       default-ssl-certificate: infra/wildcard-cert
   tcp:
     32222: infra/git-server:2222
-
-certManager:
-  httpIssuer: false
