@@ -121,10 +121,6 @@ function wait-for-kind() {
   echo "finished!";
 }
 
-# function deploy-cert-manager-crds() {
-#   kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.15.0/cert-manager.crds.yaml
-# }
-
 function deploy-infra() {
   echo 'deploying standard infrastructure...';
   kubectl get ns | grep infra || kubectl create ns infra
@@ -182,5 +178,4 @@ if !(kind get clusters | grep $KIND_CLUSTER_NAME -q); then
   wait-for-kind
 fi
 
-# deploy-cert-manager-crds
 deploy-infra
