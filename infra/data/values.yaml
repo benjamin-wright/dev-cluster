@@ -30,3 +30,7 @@ pulsar:
       managedLedgerDefaultAckQuorum: "1"
   proxy:
     replicaCount: 1
+
+cockroachdb:
+  statefulset:
+    replicas: 3
