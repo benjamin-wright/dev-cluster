@@ -3,11 +3,6 @@ secrets:
     username: admin
     # password:
 
-metrics-server:
-  args:
-    - --kubelet-insecure-tls
-    - --kubelet-preferred-address-types=InternalIP
-
 grafana:
   admin:
     existingSecret: grafana-creds

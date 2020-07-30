@@ -1,7 +1,10 @@
 .PHONY: start stop
 
-start:
+start-full:
 	@./scripts/start-cluster.sh
+
+start:
+	@./scripts/start-cluster.sh minimal
 
 stop:
 	@./scripts/stop-cluster.sh

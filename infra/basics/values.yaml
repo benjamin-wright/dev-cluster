@@ -14,3 +14,8 @@ nginx-ingress:
       default-ssl-certificate: infra/wildcard-cert
   tcp:
     32222: infra/git-server:2222
+
+metrics-server:
+  args:
+    - --kubelet-insecure-tls
+    - --kubelet-preferred-address-types=InternalIP

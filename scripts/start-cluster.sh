@@ -4,6 +4,23 @@ set -o errexit
 
 KIND_CLUSTER_NAME="local-dev"
 
+function check-args() {
+  local args=$1
+
+  if [ "$args" == "full" ]; then
+    echo "running full install"
+    return
+  fi
+
+  if [ "$args" == "minimal" ]; then
+    echo "running minimal install"
+    return
+  fi
+
+  echo "Unrecognised deployment mode: $args"
+  exit 1
+}
+
 function start-chart-museum() {
   if docker ps | grep chart-museum -q; then
     echo "chart museum already exists..."
@@ -122,6 +139,8 @@ function wait-for-kind() {
 }
 
 function deploy-infra() {
+  local args=$1
+
   echo 'deploying standard infrastructure...';
   kubectl get ns | grep infra || kubectl create ns infra
   kubectl get ns | grep data || kubectl create ns data
@@ -129,7 +148,7 @@ function deploy-infra() {
   helm repo update
 
   helm upgrade -i \
-    cert-manager jetstack/cert-manager \
+    basics jetstack/cert-manager \
     --namespace infra \
     --version v0.15.1 \
     --wait \
@@ -140,33 +159,38 @@ function deploy-infra() {
     --wait \
     --namespace infra
 
-  helm dep update ./infra/metrics --skip-refresh
-  helm upgrade --install metrics ./infra/metrics \
-    --wait \
-    --namespace infra \
-    --set-file "grafana.dashboards.default.custom.json=./grafana/dashboard.json" \
-    --set "secrets.admin.password=$(echo "password" | tr -d '\n' | base64)"
-
-  helm dep update ./infra/logging --skip-refresh
-  helm upgrade --install logging ./infra/logging \
-    --wait \
-    --timeout 10m0s \
-    --namespace infra
-
   helm dep update ./infra/registries --skip-refresh
   helm upgrade --install registries ./infra/registries \
     --wait \
     --namespace infra \
     --set "git.base.id_rsapub=$(cat ~/.ssh/id_rsa.pub | base64 | tr -d '\n')"
 
-  helm dep update ./infra/data --skip-refresh
-  helm upgrade --install data ./infra/data --namespace data
+  if [ "$args" == "full" ]; then
+    helm dep update ./infra/metrics --skip-refresh
+    helm upgrade --install metrics ./infra/metrics \
+      --wait \
+      --namespace infra \
+      --set-file "grafana.dashboards.default.custom.json=./grafana/dashboard.json" \
+      --set "secrets.admin.password=$(echo "password" | tr -d '\n' | base64)"
+
+
+    helm dep update ./infra/data --skip-refresh
+    helm upgrade --install data ./infra/data \
+      --namespace data
+
+    helm dep update ./infra/logging --skip-refresh
+    helm upgrade --install logging ./infra/logging \
+      --namespace infra
+  fi
 }
 
 ##############################################################################
 #                                   Main                                     #
 ##############################################################################
 
+args="${1:-full}"
+
+check-args $args
 start-chart-museum
 start-registry
 build-git-server
@@ -176,4 +200,4 @@ if !(kind get clusters | grep $KIND_CLUSTER_NAME -q); then
   wait-for-kind
 fi
 
-deploy-infra
+deploy-infra $args

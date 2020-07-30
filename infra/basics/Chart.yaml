@@ -26,3 +26,6 @@ dependencies:
   - name: nginx-ingress
     version: ~1.36.3
     repository: https://kubernetes-charts.storage.googleapis.com
+  - name: metrics-server
+    version: ~2.11.1
+    repository: https://kubernetes-charts.storage.googleapis.com
