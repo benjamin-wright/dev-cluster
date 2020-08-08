@@ -1,9 +1,0 @@
-dependencies:
-- name: verdaccio
-  repository: https://charts.verdaccio.org
-  version: 0.10.0
-- name: git-server
-  repository: http://localhost:5007
-  version: 0.1.2
-digest: sha256:c82234bce932650dff6ab1cdda59d4ea603830c474e28afb3ec35978d0da79c8
-generated: "2020-07-14T06:36:20.096517+01:00"

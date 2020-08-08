@@ -1,3 +1,3 @@
 .DS_Store
-infra/*/charts/*.tgz
+infra/charts/*.tgz
 data/charts

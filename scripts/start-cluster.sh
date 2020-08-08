@@ -148,7 +148,7 @@ function deploy-infra() {
   helm repo update
 
   helm upgrade -i \
-    basics jetstack/cert-manager \
+    crds jetstack/cert-manager \
     --namespace infra \
     --version v0.15.1 \
     --wait \
@@ -157,30 +157,15 @@ function deploy-infra() {
   helm dep update ./infra/basics --skip-refresh
   helm upgrade --install basics ./infra/basics \
     --wait \
-    --namespace infra
-
-  helm dep update ./infra/registries --skip-refresh
-  helm upgrade --install registries ./infra/registries \
-    --wait \
     --namespace infra \
+    --set-file "grafana.dashboards.default.metrics.json=./grafana/dashboard.json" \
+    --set "secrets.admin.password=$(echo "password" | tr -d '\n' | base64)" \
     --set "git.base.id_rsapub=$(cat ~/.ssh/id_rsa.pub | base64 | tr -d '\n')"
 
   if [ "$args" == "full" ]; then
-    helm dep update ./infra/metrics --skip-refresh
-    helm upgrade --install metrics ./infra/metrics \
-      --wait \
-      --namespace infra \
-      --set-file "grafana.dashboards.default.custom.json=./grafana/dashboard.json" \
-      --set "secrets.admin.password=$(echo "password" | tr -d '\n' | base64)"
-
-
     helm dep update ./infra/data --skip-refresh
     helm upgrade --install data ./infra/data \
       --namespace data
-
-    helm dep update ./infra/logging --skip-refresh
-    helm upgrade --install logging ./infra/logging \
-      --namespace infra
   fi
 }
 
