@@ -99,6 +99,8 @@ EOF
 
   for node in $(kind get nodes --name "${KIND_CLUSTER_NAME}"); do
     kubectl annotate node "${node}" tilt.dev/registry=localhost:${reg_port};
+    docker exec "$node" sysctl fs.inotify.max_user_watches=524288
+    docker exec "$node" sysctl fs.inotify.max_user_instances=512
   done
 
   local containers=$(docker network inspect ${kind_network} -f "{{range .Containers}}{{.Name}} {{end}}")
